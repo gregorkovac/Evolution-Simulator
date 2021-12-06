@@ -10,7 +10,7 @@ typedef vector<Neuron> Layer;
 
 class NeuralNet {
     public:
-        NeuralNet(vector<double> &topology); // Class constructor. Accepts topology in the form of "(3, 2, 1)" (number of neurons per layer)
+        NeuralNet(vector<int> &topology); // Class constructor. Accepts topology in the form of "(3, 2, 1)" (number of neurons per layer)
         void feedForward(vector<double> &inputValues); // Feeds input values to the neural net
         void getResults(vector<double> &resultValues); // Gets output from the neural net
     private:
