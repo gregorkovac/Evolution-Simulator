@@ -3,14 +3,23 @@
 
 #include <vector>
 #include <stdlib.h>
+#include <math.h>
 
 using namespace std;
 
+class Neuron; // Declaration for use in typedef
+typedef vector<Neuron> Layer;
+
 class Neuron {
     public:
-        Neuron(int numOfOutputs);
+        Neuron(int numOfOutputs, int index);
+        void setOutputValue(double value);
+        double getOutputValue();
+        void feedForward(Layer &prevLayer);
     private:
         double randomWeight();
+        static double transferFunction(double x);
+        int myIndex;
         double outputValue;
         vector<double> outputWeights;
 };

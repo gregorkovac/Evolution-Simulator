@@ -2,11 +2,10 @@
 #define NEURALNET_H
 
 #include <vector>
+#include <assert.h>
 #include "../include/Neuron.h"
 
 using namespace std;
-
-typedef vector<Neuron> Layer;
 
 class NeuralNet {
     public:
