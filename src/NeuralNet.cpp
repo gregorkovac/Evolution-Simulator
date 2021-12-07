@@ -13,8 +13,11 @@ NeuralNet::NeuralNet(vector<int> &topology) {
         // Generates neurons in layer (+ 1 extra bias neuron)
         for (int j = 0; j <= topology[i]; j++) {
             layers.back().push_back(Neuron(numberOfOutputs, j));
-            printf("Added neuron!\n");
+          //  printf("Added neuron!\n");
         }
+
+        // Bias neuron has a constant output value of 1.0
+        layers.back().back().setOutputValue(1.0);
     }
 }
 
@@ -36,5 +39,9 @@ void NeuralNet::feedForward(vector<double> &inputValues) {
 }
 
 void NeuralNet::getResults(vector<double> &resultValues) {
-    
+    resultValues.clear();
+
+    for (int i = 0; i < layers.back().size() - 1; i++) {
+        resultValues.push_back(layers.back()[i].getOutputValue());
+    }
 }
