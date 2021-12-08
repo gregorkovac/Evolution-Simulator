@@ -1,6 +1,6 @@
 #include "../include/NeuralNet.h"
 
-NeuralNet::NeuralNet(vector<int> &topology) {
+NeuralNet::NeuralNet(vector<int> &topology, vector<int> &dna) {
     int numberOfLayers = topology.size();
 
     // Generates layers 
@@ -18,6 +18,37 @@ NeuralNet::NeuralNet(vector<int> &topology) {
 
         // Bias neuron has a constant output value of 1.0
         layers.back().back().setOutputValue(1.0);
+    }
+
+    // DNA decode
+    int dnaLength = dna.size();
+    for (int i = 0; i < dnaLength; i++) {
+        short srcType, srcID, destType, destID, weight;
+
+        srcType = (dna[i] & 32768) >> 15;
+        srcID = (dna[i] & 28672) >> 12;
+        destType = ((dna[i] & 2048) >> 11);
+        destID = (dna[i] & 1792) >> 8;
+        weight = (dna[i] & 255);
+
+        printf("srcType: %d\n", srcType);
+        printf("srcID: %d\n", srcID);
+        printf("destType: %d\n", destType);
+        printf("destID: %d\n", destID);
+        printf("weight: %d\n", weight);
+
+        layers[srcType][srcID].outputWeights[destType][destID] = weight;
+
+        /*
+         x xxx x xxx xxxxxxxx
+         1 222 3 444 55555555
+        
+        1 - source type (0 = input, 1 = internal)
+        2 - source id
+        3 - destination type (0 = internal, 1 = output)
+        4 - output id
+        5 - connection weight
+        */
     }
 }
 
@@ -56,15 +87,25 @@ void NeuralNet::printNet() {
 
         for (int j = 0; j < numOfLayers2; j++) {
             printf("%d (", j);
-            
-            int numOfWeights = layers[i][j].outputWeights.size();
+            printf("internal weights: ");    
 
+            int numOfWeights = layers[i][j].outputWeights[0].size();
             for (int k = 0; k < numOfWeights; k++) {
-                printf("%f", layers[i][j].outputWeights[k]);
+                printf("%f", layers[i][j].outputWeights[0][k]);
                 if (k < numOfWeights - 1)
                     printf(", ");
             }
-            printf("); ");
+
+            printf("; \n   output weights: ");   
+
+            numOfWeights = layers[i][j].outputWeights[1].size();
+            for (int k = 0; k < numOfWeights; k++) {
+                printf("%f", layers[i][j].outputWeights[1][k]);
+                if (k < numOfWeights - 1)
+                    printf(", ");
+            }
+
+            printf(")\n");
         }
         printf("\n\n");
     }

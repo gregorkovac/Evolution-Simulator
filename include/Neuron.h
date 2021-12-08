@@ -16,7 +16,7 @@ class Neuron {
         void setOutputValue(double value);
         double getOutputValue();
         void feedForward(Layer &prevLayer);
-        vector<double> outputWeights;
+        vector<double> outputWeights[2];
     private:
         double randomWeight();
         static double transferFunction(double x);
