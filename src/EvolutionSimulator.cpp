@@ -13,5 +13,7 @@ int main(int argc, char* argv[]) {
 
     NeuralNet net(topology); 
 
+    net.printNet();
+
     return 0;
 }

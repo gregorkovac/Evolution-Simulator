@@ -45,3 +45,27 @@ void NeuralNet::getResults(vector<double> &resultValues) {
         resultValues.push_back(layers.back()[i].getOutputValue());
     }
 }
+
+void NeuralNet::printNet() {
+    int numOfLayers = layers.size();
+
+    for (int i = 0; i < numOfLayers; i++) {
+        int numOfLayers2 = layers[i].size();
+
+        printf("Layer %d:\n", i);
+
+        for (int j = 0; j < numOfLayers2; j++) {
+            printf("%d (", j);
+            
+            int numOfWeights = layers[i][j].outputWeights.size();
+
+            for (int k = 0; k < numOfWeights; k++) {
+                printf("%f", layers[i][j].outputWeights[k]);
+                if (k < numOfWeights - 1)
+                    printf(", ");
+            }
+            printf("); ");
+        }
+        printf("\n\n");
+    }
+}
