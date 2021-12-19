@@ -4,7 +4,7 @@ SimulationHandler::SimulationHandler() {
 
 }
 
-void SimulationHandler::init(const char* title, int xpos, int ypos, int width, int height, Uint32 flags) {
+void SimulationHandler::init(const char* title, int xpos, int ypos, int width, int height, Uint32 flags, int numCreatures) {
     //Initialize all the systems of SDL
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -18,7 +18,7 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
     running = true;
 
     // This code is here just for testing
-    vector<int> topology;
+  /*  vector<int> topology;
     vector<int> dna;
 
     topology.push_back(3);
@@ -29,7 +29,11 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
 
     NeuralNet net(topology, dna); 
 
-    net.printNet();
+    net.printNet();*/
+
+    for (int i = 0; i < numCreatures; i++) {
+        creatures.push_back(new Creature(randomNumberBetween(1, width-1), randomNumberBetween(1, height-1), 10));
+    }
 }
 
 void SimulationHandler::handleEvents() {
@@ -53,11 +57,17 @@ void SimulationHandler::update() {
 }
 
 void  SimulationHandler::render() {
-    //Set the draw color of renderer to green
+    //Set the draw color of renderer to black
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 
     //Clear the renderer with the draw color
     SDL_RenderClear(renderer);
+
+    vector<Creature*>::iterator it;
+    for (it = creatures.begin(); it != creatures.end(); it++) {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderFillCircle(renderer, (*it)->getXPos(), (*it)->getYPos(), (*it)->getSize());
+    }
 
     //Update the renderer which will show the renderer cleared by the draw color which is green
     SDL_RenderPresent(renderer);
