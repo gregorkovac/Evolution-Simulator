@@ -5,7 +5,6 @@ int randomNumberBetween(int floor, int ceiling) {
 }
 
 
-// Source: https://gist.github.com/Gumichan01/332c26f6197a432db91cc4327fcabb1c
 int SDL_RenderDrawCircle(SDL_Renderer * renderer, int x, int y, int radius)
 {
     int offsetx, offsety, d;

@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
     simulationHandler = new SimulationHandler();
 
-    simulationHandler->init("Evolution simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN, 10);
+    simulationHandler->init("Evolution simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN, 1);
     
     while (simulationHandler->isRunning()) {
         simulationHandler->handleEvents();

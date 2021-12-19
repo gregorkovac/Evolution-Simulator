@@ -28,3 +28,7 @@ int Creature::getYPos() {
 int Creature::getSize() {
     return size;
 }
+
+void Creature::Update() {
+    
+}

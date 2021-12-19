@@ -6,6 +6,7 @@ class Creature {
         int getXPos();
         int getYPos();
         int getSize();
+        void Update();
 
     private:
         NeuralNet *neuralNet;
