@@ -1,3 +1,6 @@
+#ifndef SIMULATIONHANDLER_H
+#define SIMULATIONHANDLER_H
+
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <vector>
@@ -24,3 +27,5 @@ class SimulationHandler {
         bool running;
         vector<Creature*> creatures; 
 };
+
+#endif

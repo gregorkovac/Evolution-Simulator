@@ -1,6 +1,6 @@
 #include "../include/Creature.h"
 
-Creature::Creature(int argx, int argy, int argsize) {
+Creature::Creature(float argx, float argy, int argsize) {
     vector<int> topology;
     vector<int> dna;
 
@@ -15,6 +15,7 @@ Creature::Creature(int argx, int argy, int argsize) {
     x = argx;
     y = argy;
     size = argsize;
+    speed = 0.5;
 }
 
 int Creature::getXPos() {
@@ -29,6 +30,16 @@ int Creature::getSize() {
     return size;
 }
 
-void Creature::Update() {
-    
+void Creature::update() {
+    moveY(-1);
+}
+
+void Creature::moveX(int dir) {
+    if (x > 20 && x < WINDOW_WIDTH - 20)
+        x += dir * speed;
+}
+
+void Creature::moveY(int dir) {
+    if (y > 20 && y < WINDOW_HEIGHT - 20)
+        y += dir * speed;
 }

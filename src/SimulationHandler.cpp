@@ -53,7 +53,10 @@ void SimulationHandler::handleEvents() {
 }
 
 void SimulationHandler::update() {
-
+    int numCreatures = creatures.size();
+    for (int i = 0; i < numCreatures; i++) {
+        creatures[i]->update();
+    }
 }
 
 void  SimulationHandler::render() {
@@ -63,10 +66,11 @@ void  SimulationHandler::render() {
     //Clear the renderer with the draw color
     SDL_RenderClear(renderer);
 
+    int numCreatures = creatures.size();
     vector<Creature*>::iterator it;
-    for (it = creatures.begin(); it != creatures.end(); it++) {
+    for (int i = 0; i < numCreatures; i++) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderFillCircle(renderer, (*it)->getXPos(), (*it)->getYPos(), (*it)->getSize());
+        SDL_RenderFillCircle(renderer, creatures[i]->getXPos(), creatures[i]->getYPos(), creatures[i]->getSize());
     }
 
     //Update the renderer which will show the renderer cleared by the draw color which is green
