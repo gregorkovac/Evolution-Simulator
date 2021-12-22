@@ -4,8 +4,12 @@
 #include <random>
 #include <SDL2/SDL.h>
 
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 1080
+#define WINDOW_WIDTH 860
+#define WINDOW_HEIGHT 640
+
+struct Colour {
+    int r, g, b;
+};
 
 int randomNumberBetween(int floor, int ceiling);
 int SDL_RenderDrawCircle(SDL_Renderer * renderer, int x, int y, int radius);

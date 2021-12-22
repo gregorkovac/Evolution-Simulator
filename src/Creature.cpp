@@ -1,5 +1,17 @@
 #include "../include/Creature.h"
 
+int debug_generateDna(int srcType, int srcId, int destType, int destId, int weight) {
+    int out = 0;
+
+    out |= (srcType << 15);
+    out |= (srcId << 12);
+    out |= (destType << 11);
+    out |= (destId << 8);
+    out |= weight;
+
+    return out;
+}
+
 Creature::Creature(float argx, float argy, int argsize) {
     //vector<int> topology; // Create a fixed topology
     vector<int> dna;
@@ -8,14 +20,40 @@ Creature::Creature(float argx, float argy, int argsize) {
     topology.push_back(2);
     topology.push_back(1);*/
 
-    dna.push_back(6639); // 0001100111101111
+   //dna.push_back(6639); // 0001100111101111
+    // dna.push_back(4351); // 0000000011111111
+
+    // dna.push_back(35071); // 1000100011111111
+
+   // printf("Test: %d\n", debug_generateDna(1, 1, 1, 1, 1));
+
+   /* dna.push_back(debug_generateDna(0, 2, 1, 0, 255));
+    dna.push_back(debug_generateDna(0, 0, 0, 0, 255));
+    dna.push_back(debug_generateDna(0, 2, 1, 1, 255));*/
+
+   /* dna.push_back(debug_generateDna(0, 0, 1, 0, 255)); // X
+    dna.push_back(debug_generateDna(0, 0, 0, 0, 255)); // Internal for Y
+    dna.push_back(debug_generateDna(1, 0, 1, 1, 255)); // Y*/
+
+    for (int i = 0; i < 10; i++) {
+        //dna.push_back(randomNumberBetween(0, 65535));
+        dna.push_back(debug_generateDna(randomNumberBetween(0,1),
+            randomNumberBetween(0, 8), randomNumberBetween(0, 1),
+            randomNumberBetween(0, 3), randomNumberBetween(0, 255)));
+    }
 
     neuralNet = new NeuralNet(*Creature::netTopology, dna);
+
+    neuralNet->printNet();
 
     x = argx;
     y = argy;
     size = argsize;
     speed = 0.5;
+    age = 0.0;
+    colour.r = randomNumberBetween(0, 255);
+    colour.g = randomNumberBetween(0, 255);
+    colour.b = randomNumberBetween(0, 255);
 }
 
 int Creature::getXPos() {
@@ -30,13 +68,53 @@ int Creature::getSize() {
     return size;
 }
 
-void Creature::update() {
+void Creature::update(float time) {
+    age = age + 0.1;
+
+    vector<double> inputValues;
+
+    inputValues.push_back(oscillator(time));
+    inputValues.push_back(age);
+    inputValues.push_back(random());
+    inputValues.push_back(blockageUp());
+    inputValues.push_back(blockageDown());
+    inputValues.push_back(blockageLeft());
+    inputValues.push_back(blockageRight());
+    inputValues.push_back(lastMoveX());
+    inputValues.push_back(lastMoveY());
+
+  /*  printf("Input values:\n");
+    for (int i = 0; i < inputValues.size(); i++)
+        printf("%f ", inputValues[i]);
+    printf("\n"); */
+
+    neuralNet->feedForward(inputValues);
+
+    vector<double> outputValues;
+
+    neuralNet->getResults(outputValues);
+
+  /*  printf("Output values:\n");
+    for (int i = 0; i < outputValues.size(); i++)
+        printf("%f ", outputValues[i]);
+    printf("\n");*/
+    
+
+    if (outputValues[0] > 0.0)
+        moveX(1);
+    else if (outputValues[0] < 0.0)
+        moveX(-1);
+    if (outputValues[1] > 0.0)
+        moveY(1);
+    else if (outputValues[1] < 0.0)
+        moveY(-1);
     
 }
 
 void Creature::moveX(int dir) {
-    if (x > 20 && x < WINDOW_WIDTH - 20)
-        x += dir * speed;
+    int xMove = x + dir * speed;
+    if (xMove > 20 && xMove < WINDOW_WIDTH - 20)
+        x = xMove;
 }
 
 void Creature::moveY(int dir) {
@@ -78,4 +156,40 @@ void Creature::initializeNetTopology() {
     Creature::netTopology->push_back(3);
     Creature::netTopology->push_back(4);
    
+}
+
+double Creature::oscillator(float time) {
+    return 0.5*sinf(time);
+}
+
+double Creature::random() {
+    return (float)randomNumberBetween(-100, 100)/100.0;
+}
+
+double Creature::blockageUp() {
+    return 1.0;
+}
+
+double Creature::blockageDown() {
+    return 1.0;
+}
+
+double Creature::blockageLeft() {
+    return 1.0;
+}
+
+double Creature::blockageRight() {
+    return 1.0;
+}
+
+double Creature::lastMoveX() {
+    return 1.0;
+}
+
+double Creature::lastMoveY() {
+    return 1.0;
+}
+
+Colour Creature::getColour() {
+    return colour;
 }

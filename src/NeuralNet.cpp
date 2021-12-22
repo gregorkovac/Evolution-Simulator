@@ -37,11 +37,16 @@ NeuralNet::NeuralNet(vector<int> &topology, vector<int> &dna) {
         printf("destID: %d\n", destID);
         printf("weight: %d\n", weight);
 
+        if (srcID >= layers[srcType].size() || destID >= layers[destType].size()) {
+            continue;
+        }
+
         layers[srcType][srcID].outputWeights[destType][destID] = weight;
 
         /*
          x xxx x xxx xxxxxxxx
          1 222 3 444 55555555
+         1 000 1 000 11111111
         
         1 - source type (0 = input, 1 = internal)
         2 - source id
@@ -55,17 +60,29 @@ NeuralNet::NeuralNet(vector<int> &topology, vector<int> &dna) {
 void NeuralNet::feedForward(vector<double> &inputValues) {
     assert(inputValues.size() == layers[0].size() - 1);
 
+   // printf("rand: %f\n", inputValues[2]);
+
     // Assign the input values to the neurons
     for (int i = 0; i < inputValues.size(); i++) {
         layers[0][i].setOutputValue(inputValues[i]);
     }
 
     // Forward propagate
-    for (int i = 1; i < layers.size(); i++) {
+    /*for (int i = 1; i < layers.size(); i++) {
         Layer &prevLayer = layers[i - 1];
         for (int j = 0; j < layers[i].size() - 1; j++) {
             layers[i][j].feedForward(prevLayer);
+            if (i == 2)
+                layers[i][j].feedForward(layers[i - 2]);
         }
+    }*/
+
+    for (int i = 0; i < layers[1].size() - 1; i++) {
+        layers[1][i].feedForward(layers[0]);
+    }
+
+    for (int i = 0; i < layers[2].size() - 1; i++) {
+        layers[2][i].dualFeedForward(layers[0], layers[1]);
     }
 }
 
@@ -73,6 +90,8 @@ void NeuralNet::getResults(vector<double> &resultValues) {
     resultValues.clear();
 
     for (int i = 0; i < layers.back().size() - 1; i++) {
+    /*    if (layers.back()[i].getOutputValue() != 0.0)
+            printf("%f\n", layers.back()[i].getOutputValue());*/
         resultValues.push_back(layers.back()[i].getOutputValue());
     }
 }

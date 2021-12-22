@@ -26,6 +26,7 @@ class SimulationHandler {
         SDL_Renderer* renderer;
         bool running;
         vector<Creature*> creatures; 
+        clock_t tStart;
 };
 
 #endif

@@ -10,9 +10,10 @@ class Creature {
         int getXPos();
         int getYPos();
         int getSize();
-        void update();
+        void update(float time);
         void moveX(int dir);
         void moveY(int dir);
+        Colour getColour();
         static void initializeNetTopology();
         static vector<int> *netTopology;
 
@@ -21,6 +22,17 @@ class Creature {
         float x, y;
         int size;
         float speed;
+        double age;
+        Colour colour;
+        
+        double oscillator(float time);
+        double random();
+        double blockageUp();
+        double blockageDown();
+        double blockageLeft();
+        double blockageRight();
+        double lastMoveX();
+        double lastMoveY();
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "../include/SimulationHandler.h"
+#include <time.h>
 
 SimulationHandler::SimulationHandler() {
 
@@ -34,8 +35,10 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
     Creature::initializeNetTopology();
 
     for (int i = 0; i < numCreatures; i++) {
-        creatures.push_back(new Creature(randomNumberBetween(1, width-1), randomNumberBetween(1, height-1), 10));
+        creatures.push_back(new Creature(randomNumberBetween(1, width-1), randomNumberBetween(1, height-1), 5));
     }
+
+    tStart = clock();
 }
 
 void SimulationHandler::handleEvents() {
@@ -55,9 +58,11 @@ void SimulationHandler::handleEvents() {
 }
 
 void SimulationHandler::update() {
+    float time = (double)(clock() - tStart)/CLOCKS_PER_SEC;
+
     int numCreatures = creatures.size();
     for (int i = 0; i < numCreatures; i++) {
-        creatures[i]->update();
+        creatures[i]->update(time);
     }
 }
 
@@ -71,7 +76,8 @@ void  SimulationHandler::render() {
     int numCreatures = creatures.size();
     vector<Creature*>::iterator it;
     for (int i = 0; i < numCreatures; i++) {
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        Colour c = creatures[i]->getColour();
+        SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, 255);
         SDL_RenderFillCircle(renderer, creatures[i]->getXPos(), creatures[i]->getYPos(), creatures[i]->getSize());
     }
 
