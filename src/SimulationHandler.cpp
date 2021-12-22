@@ -31,6 +31,8 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
 
     net.printNet();*/
 
+    Creature::initializeNetTopology();
+
     for (int i = 0; i < numCreatures; i++) {
         creatures.push_back(new Creature(randomNumberBetween(1, width-1), randomNumberBetween(1, height-1), 10));
     }

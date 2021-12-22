@@ -13,6 +13,8 @@ class Creature {
         void update();
         void moveX(int dir);
         void moveY(int dir);
+        static void initializeNetTopology();
+        static vector<int> *netTopology;
 
     private:
         NeuralNet *neuralNet;
