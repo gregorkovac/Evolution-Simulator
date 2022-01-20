@@ -41,16 +41,27 @@ void Neuron::dualFeedForward(Layer &prevLayer0, Layer &prevLayer1) {
     double sum = 0.0;
 
     for (int i = 0; i < prevLayer0.size(); i++) {
-        /*printf("-- %f\n", prevLayer0[i].outputWeights[1][myIndex]);
-        printf("---- %f\n", prevLayer0[i].getOutputValue() );*/
-        sum += prevLayer0[i].getOutputValue() * prevLayer0[i].outputWeights[0][myIndex];
+        //printf("-- %f\n", prevLayer0[i].outputWeights[1][myIndex]);
+       // if (myIndex == 3 && i == 2) {
+            //printf("---- %d %f %f\n", i, prevLayer0[i].getOutputValue(), prevLayer0[i].outputWeights[1][myIndex]);
+       // }
+
+        sum += prevLayer0[i].getOutputValue() * prevLayer0[i].outputWeights[1][myIndex];
+       // if (myIndex == 3)
+        //    printf("%f\n", prevLayer0[i].getOutputValue() * prevLayer0[i].outputWeights[1][myIndex]);
     }
 
     for (int i = 0; i < prevLayer1.size(); i++) {
         sum += prevLayer1[i].getOutputValue() * prevLayer1[i].outputWeights[1][myIndex];
     }
 
-    outputValue = Neuron::transferFunction(sum);
+    if (myIndex == 3) {
+        outputValue = Neuron::transferFunction2(sum);
+      //  printf("%f\n", outputValue);
+    } else
+        outputValue = Neuron::transferFunction(sum);
+    
+   //printf("%d\n", myIndex);
 
     //printf("%d : (dual) %f -> %f\n", myIndex, sum, outputValue);
 }
@@ -59,4 +70,8 @@ double Neuron::transferFunction(double x) {
     return tanh(x); // Returns a value in [-1.0, 1.0]
     
     // tanh(x) derivative approximation = 1.0 - x * x (for further reference) 
+}
+
+double Neuron::transferFunction2(double x) {
+    return mapInteger(x, -255.0, 255.0, -1.0, 1.0);
 }

@@ -92,6 +92,14 @@ void NeuralNet::getResults(vector<double> &resultValues) {
     for (int i = 0; i < layers.back().size() - 1; i++) {
     /*    if (layers.back()[i].getOutputValue() != 0.0)
             printf("%f\n", layers.back()[i].getOutputValue());*/
+
+     //   switch(i) {
+      //      case 3:
+              //  outVal = mapInteger(outVal, -1.0, 1.0, 0.0, 5.0);
+        //    break;
+       // }
+
+      //  resultValues.push_back(layers.back()[i].getOutputValue());
         resultValues.push_back(layers.back()[i].getOutputValue());
     }
 }

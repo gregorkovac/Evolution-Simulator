@@ -4,6 +4,7 @@
 #include <vector>
 #include <assert.h>
 #include "../include/Neuron.h"
+#include "../include/Misc.h"
 
 using namespace std;
 

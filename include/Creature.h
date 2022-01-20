@@ -23,6 +23,7 @@ class Creature {
         int size;
         float speed;
         double age;
+        float oscillatorPeriod;
         Colour colour;
         
         double oscillator(float time);

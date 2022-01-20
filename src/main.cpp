@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 
     simulationHandler = new SimulationHandler();
 
-    simulationHandler->init("Evolution simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN, 50);
+    simulationHandler->init("Evolution simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN, 100);
 
     while (simulationHandler->isRunning()) {
         simulationHandler->handleEvents();

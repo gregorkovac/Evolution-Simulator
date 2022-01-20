@@ -1,6 +1,9 @@
 #include "../include/Misc.h"
 
 int randomNumberBetween(int floor, int ceiling) {
+    ceiling++;
+    if (floor < 0)
+        return (rand() % (-floor + ceiling)) + floor;
     return (rand() % ceiling) + floor;
 }
 
@@ -94,4 +97,8 @@ int SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius)
     }
 
     return status;
+}
+
+float mapInteger(float num, float a, float b, float c, float d) {
+    return (num - a)/(b - a) * (d - c) + c;
 }

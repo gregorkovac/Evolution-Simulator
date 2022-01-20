@@ -1,6 +1,11 @@
 # evolution-simulator
 
-## Compilation
+**Disclaimer:** this project is still very much work in progress. I have programmed the creatures to have random genes, but there is no "evolution" happening yet.
+
+## What is this project?
+As the name suggests, it's a simple evolution simulator. I basically created this project to start learning neural nets. It runs one C++ and I'm using SDL2 for graphics.
+
+## How to build and run
 Compile using `make EvolutionSimulator`\
 Run using `./src/EvolutionSimulator.out`
 

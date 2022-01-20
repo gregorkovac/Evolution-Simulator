@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <math.h>
+#include "../include/Misc.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ class Neuron {
     private:
         double randomWeight();
         static double transferFunction(double x);
+        static double transferFunction2(double x);
         int myIndex;
         double outputValue;
 };
