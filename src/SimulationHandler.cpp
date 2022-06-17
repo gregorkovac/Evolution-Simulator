@@ -38,6 +38,8 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
         creatures.push_back(new Creature(randomNumberBetween(1, width-1), randomNumberBetween(1, height-1), 5));
     }
 
+    deathFactor = 100000;
+
     tStart = clock();
 }
 
@@ -62,9 +64,9 @@ void SimulationHandler::update() {
 
     int numCreatures = creatures.size();
     for (int i = 0; i < numCreatures; i++) {
-        int ret = creatures[i]->update(time);
+        creatures[i]->update(time);
 
-        if (ret == 1) {
+        if (randomNumberBetween(0, deathFactor) < creatures[i]->getAge()) {
             creatures.erase(creatures.begin() + i);
             numCreatures--;
             i--;

@@ -79,13 +79,8 @@ int Creature::getSize() {
     return size;
 }
 
-int Creature::update(float time) {
+void Creature::update(float time) {
     age = age + 0.1;
-
-    // TODO: exponentially bigger chance of death every year
-    if (randomNumberBetween(0, 100000) < age) {
-        return 1; // Return status for dead creature
-    }
 
     vector<double> inputValues;
 
@@ -147,8 +142,6 @@ int Creature::update(float time) {
         oscillatorPeriod = 2*outputValues[3];
       //  printf("%f\n", oscillatorPeriod);
     }
-    
-    return 0;
 }
 
 void Creature::moveX(int dir) {
@@ -243,4 +236,7 @@ double Creature::lastMoveY() {
 
 Colour Creature::getColour() {
     return colour;
+}
+double Creature::getAge() {
+    return age;
 }

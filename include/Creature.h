@@ -10,12 +10,13 @@ class Creature {
         int getXPos();
         int getYPos();
         int getSize();
-        int update(float time);
+        void update(float time);
         void moveX(int dir);
         void moveY(int dir);
         Colour getColour();
         static void initializeNetTopology();
         static vector<int> *netTopology;
+        double getAge();
 
     private:
         NeuralNet *neuralNet;

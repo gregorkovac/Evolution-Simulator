@@ -27,6 +27,7 @@ class SimulationHandler {
         bool running;
         vector<Creature*> creatures; 
         clock_t tStart;
+        int deathFactor;
 };
 
 #endif
