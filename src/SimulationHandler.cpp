@@ -67,7 +67,7 @@ void SimulationHandler::update() {
     for (int i = 0; i < numCreatures; i++) {
         creatures[i]->update(time);
 
-        if (randomNumberBetween(0, deathFactor) < creatures[i]->getAge()) {
+        if (randomNumberBetween(0, deathFactor) < creatures[i]->getAge() || euclideanDistance(creatures[i]->getXPos(), creatures[i]->getYPos(), WINDOW_WIDTH, WINDOW_HEIGHT) < 100) {
             creatures.erase(creatures.begin() + i);
             numCreatures--;
             i--;
@@ -92,6 +92,9 @@ void  SimulationHandler::render() {
 
     //Clear the renderer with the draw color
     SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawCircle(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, 100);
 
     int numCreatures = creatures.size();
     vector<Creature*>::iterator it;

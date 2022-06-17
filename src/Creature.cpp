@@ -254,7 +254,7 @@ double Creature::getAge() {
 bool Creature::readyToMate() {
     if (age < 50)
         return 0;
-    if (randomNumberBetween(0, 1000) < 100)
+    if (randomNumberBetween(0, 100) < 50)
         return 1;
     return 0;
 }
