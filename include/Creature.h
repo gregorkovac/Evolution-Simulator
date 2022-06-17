@@ -10,7 +10,7 @@ class Creature {
         int getXPos();
         int getYPos();
         int getSize();
-        void update(float time);
+        int update(float time);
         void moveX(int dir);
         void moveY(int dir);
         Colour getColour();

@@ -62,7 +62,13 @@ void SimulationHandler::update() {
 
     int numCreatures = creatures.size();
     for (int i = 0; i < numCreatures; i++) {
-        creatures[i]->update(time);
+        int ret = creatures[i]->update(time);
+
+        if (ret == 1) {
+            creatures.erase(creatures.begin() + i);
+            numCreatures--;
+            i--;
+        }
     }
 }
 
