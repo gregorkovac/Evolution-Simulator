@@ -15,5 +15,6 @@ int randomNumberBetween(int floor, int ceiling);
 int SDL_RenderDrawCircle(SDL_Renderer * renderer, int x, int y, int radius);
 int SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius);
 float mapInteger(float num, float a, float b, float c, float d);
+float euclideanDistance(float x1, float y1, float x2, float y2);
 
 #endif

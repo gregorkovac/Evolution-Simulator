@@ -102,3 +102,7 @@ int SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius)
 float mapInteger(float num, float a, float b, float c, float d) {
     return (num - a)/(b - a) * (d - c) + c;
 }
+
+float euclideanDistance(float x1, float y1, float x2, float y2) {
+    return (float)sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+}

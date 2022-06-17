@@ -28,6 +28,7 @@ class SimulationHandler {
         vector<Creature*> creatures; 
         clock_t tStart;
         int deathFactor;
+        float creatureTriggerDistance;
 };
 
 #endif

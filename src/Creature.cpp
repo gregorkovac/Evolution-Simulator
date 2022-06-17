@@ -12,9 +12,8 @@ int debug_generateDna(int srcType, int srcId, int destType, int destId, int weig
     return out;
 }
 
-Creature::Creature(float argx, float argy, int argsize) {
+Creature::Creature(float argx, float argy, int argsize, Creature* parent1, Creature* parent2) {
     //vector<int> topology; // Create a fixed topology
-    vector<int> dna;
 
     /*topology.push_back(3);
     topology.push_back(2);
@@ -35,12 +34,22 @@ Creature::Creature(float argx, float argy, int argsize) {
     dna.push_back(debug_generateDna(0, 0, 0, 0, 255)); // Internal for Y
     dna.push_back(debug_generateDna(1, 0, 1, 1, 255)); // Y*/
 
-    for (int i = 0; i < 50; i++) {
+    if (parent1 == NULL || parent2 == NULL) {
+        for (int i = 0; i < 50; i++) {
         //dna.push_back(randomNumberBetween(0, 65535));
-        dna.push_back(debug_generateDna(randomNumberBetween(0,1),
-            randomNumberBetween(0, 8), randomNumberBetween(0, 1),
-            randomNumberBetween(0, 3), randomNumberBetween(0, 255)));
-    } 
+            dna.push_back(debug_generateDna(randomNumberBetween(0,1),
+                randomNumberBetween(0, 8), randomNumberBetween(0, 1),
+                randomNumberBetween(0, 3), randomNumberBetween(0, 255)));
+        } 
+    } else {
+        for (int i = 0; i < 50; i++) {
+            if (randomNumberBetween(0, 10) <= 5) {
+                dna.push_back(parent1->getDnaAtPosition(i));
+            } else {
+                dna.push_back(parent2->getDnaAtPosition(i));
+            }
+        }
+    }
 
    // dna.push_back(debug_generateDna(0, 2, 1, 0, 100));
 
@@ -67,11 +76,11 @@ Creature::Creature(float argx, float argy, int argsize) {
     colour.b = randomNumberBetween(50, 200);
 }
 
-int Creature::getXPos() {
+float Creature::getXPos() {
     return x;
 }
 
-int Creature::getYPos() {
+float Creature::getYPos() {
     return y;
 }
 
@@ -237,6 +246,19 @@ double Creature::lastMoveY() {
 Colour Creature::getColour() {
     return colour;
 }
+
 double Creature::getAge() {
     return age;
+}
+
+bool Creature::readyToMate() {
+    if (age < 50)
+        return 0;
+    if (randomNumberBetween(0, 1000) < 100)
+        return 1;
+    return 0;
+}
+
+int Creature::getDnaAtPosition(int pos) {
+    return dna.at(pos);
 }

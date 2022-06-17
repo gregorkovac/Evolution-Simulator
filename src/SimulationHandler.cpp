@@ -39,6 +39,7 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
     }
 
     deathFactor = 100000;
+    creatureTriggerDistance = 1.0;
 
     tStart = clock();
 }
@@ -70,6 +71,17 @@ void SimulationHandler::update() {
             creatures.erase(creatures.begin() + i);
             numCreatures--;
             i--;
+            continue;
+        }
+    }
+
+    for (int i = 0; i < numCreatures; i++) {
+        for (int j = 0; j < i; j++) {
+            if (i != j && euclideanDistance(creatures[i]->getXPos(), creatures[i]->getYPos(), creatures[j]->getXPos(), creatures[j]->getYPos()) <= creatureTriggerDistance) {
+                if (creatures[i]->readyToMate() && creatures[j]->readyToMate() && creatures.size() < 200) {
+                    creatures.push_back(new Creature(creatures[i]->getXPos(), creatures[i]->getYPos(), 5));
+                }
+            }
         }
     }
 }

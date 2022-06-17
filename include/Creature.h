@@ -5,10 +5,10 @@
 #include "../include/Misc.h"
 
 class Creature {
-    public:
-        Creature(float argx, float argy, int argsize);
-        int getXPos();
-        int getYPos();
+    public:    
+        Creature(float argx, float argy, int argsize, Creature* parent1 = NULL, Creature* parent2 = NULL);
+        float getXPos();
+        float getYPos();
         int getSize();
         void update(float time);
         void moveX(int dir);
@@ -17,6 +17,8 @@ class Creature {
         static void initializeNetTopology();
         static vector<int> *netTopology;
         double getAge();
+        bool readyToMate();
+        int getDnaAtPosition(int pos);
 
     private:
         NeuralNet *neuralNet;
@@ -26,6 +28,7 @@ class Creature {
         double age;
         float oscillatorPeriod;
         Colour colour;
+        vector<int> dna;
         
         double oscillator(float time);
         double random();
