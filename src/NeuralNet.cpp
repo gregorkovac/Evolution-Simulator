@@ -31,12 +31,6 @@ NeuralNet::NeuralNet(vector<int> &topology, vector<int> &dna) {
         destID = (dna[i] & 1792) >> 8;
         weight = (dna[i] & 255);
 
-        printf("srcType: %d\n", srcType);
-        printf("srcID: %d\n", srcID);
-        printf("destType: %d\n", destType);
-        printf("destID: %d\n", destID);
-        printf("weight: %d\n", weight);
-
         if (srcID >= layers[srcType].size() || destID >= layers[destType].size()) {
             continue;
         }
@@ -60,23 +54,12 @@ NeuralNet::NeuralNet(vector<int> &topology, vector<int> &dna) {
 void NeuralNet::feedForward(vector<double> &inputValues) {
     assert(inputValues.size() == layers[0].size() - 1);
 
-   // printf("rand: %f\n", inputValues[2]);
-
     // Assign the input values to the neurons
     for (int i = 0; i < inputValues.size(); i++) {
         layers[0][i].setOutputValue(inputValues[i]);
     }
 
     // Forward propagate
-    /*for (int i = 1; i < layers.size(); i++) {
-        Layer &prevLayer = layers[i - 1];
-        for (int j = 0; j < layers[i].size() - 1; j++) {
-            layers[i][j].feedForward(prevLayer);
-            if (i == 2)
-                layers[i][j].feedForward(layers[i - 2]);
-        }
-    }*/
-
     for (int i = 0; i < layers[1].size() - 1; i++) {
         layers[1][i].feedForward(layers[0]);
     }
@@ -89,19 +72,8 @@ void NeuralNet::feedForward(vector<double> &inputValues) {
 void NeuralNet::getResults(vector<double> &resultValues) {
     resultValues.clear();
 
-    for (int i = 0; i < layers.back().size() - 1; i++) {
-    /*    if (layers.back()[i].getOutputValue() != 0.0)
-            printf("%f\n", layers.back()[i].getOutputValue());*/
-
-     //   switch(i) {
-      //      case 3:
-              //  outVal = mapInteger(outVal, -1.0, 1.0, 0.0, 5.0);
-        //    break;
-       // }
-
-      //  resultValues.push_back(layers.back()[i].getOutputValue());
+    for (int i = 0; i < layers.back().size() - 1; i++)
         resultValues.push_back(layers.back()[i].getOutputValue());
-    }
 }
 
 void NeuralNet::printNet() {

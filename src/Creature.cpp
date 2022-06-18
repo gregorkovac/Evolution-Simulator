@@ -13,27 +13,6 @@ int debug_generateDna(int srcType, int srcId, int destType, int destId, int weig
 }
 
 Creature::Creature(float argx, float argy, int argsize, Creature* parent1, Creature* parent2) {
-    //vector<int> topology; // Create a fixed topology
-
-    /*topology.push_back(3);
-    topology.push_back(2);
-    topology.push_back(1);*/
-
-   //dna.push_back(6639); // 0001100111101111
-    // dna.push_back(4351); // 0000000011111111
-
-    // dna.push_back(35071); // 1000100011111111
-
-   // printf("Test: %d\n", debug_generateDna(1, 1, 1, 1, 1));
-
-   /* dna.push_back(debug_generateDna(0, 2, 1, 0, 255));
-    dna.push_back(debug_generateDna(0, 0, 0, 0, 255));
-    dna.push_back(debug_generateDna(0, 2, 1, 1, 255));*/
-
-   /* dna.push_back(debug_generateDna(0, 0, 1, 0, 255)); // X
-    dna.push_back(debug_generateDna(0, 0, 0, 0, 255)); // Internal for Y
-    dna.push_back(debug_generateDna(1, 0, 1, 1, 255)); // Y*/
-
     if (parent1 == NULL || parent2 == NULL) {
         for (int i = 0; i < 50; i++) {
         //dna.push_back(randomNumberBetween(0, 65535));
@@ -41,6 +20,11 @@ Creature::Creature(float argx, float argy, int argsize, Creature* parent1, Creat
                 randomNumberBetween(0, 8), randomNumberBetween(0, 1),
                 randomNumberBetween(0, 3), randomNumberBetween(0, 255)));
         } 
+
+        colour.r = randomNumberBetween(50, 200);
+        colour.g = randomNumberBetween(50, 200);
+        colour.b = randomNumberBetween(50, 200);
+        oscillatorPeriod = 1.0;
     } else {
         for (int i = 0; i < 50; i++) {
             if (randomNumberBetween(0, 10) <= 5) {
@@ -49,31 +33,24 @@ Creature::Creature(float argx, float argy, int argsize, Creature* parent1, Creat
                 dna.push_back(parent2->getDnaAtPosition(i));
             }
         }
+
+        Colour parent1Colour = parent1->getColour();
+        Colour parent2Colour = parent2->getColour();
+
+        colour.r = 0.5 * parent1Colour.r + 0.5 * parent2Colour.r;
+        colour.g = 0.5 * parent1Colour.g + 0.5 * parent2Colour.g;
+        colour.b = 0.5 * parent1Colour.b + 0.5 * parent2Colour.b; 
     }
-
-   // dna.push_back(debug_generateDna(0, 2, 1, 0, 100));
-
- //   dna.push_back(debug_generateDna(0, 0, 0, 0, 255));
-   // dna.push_back(debug_generateDna(1, 0, 1, 0, 255));
-   // dna.push_back(debug_generateDna(0, 2, 1, 3, 255));
-   // dna.push_back(debug_generateDna(0, 2, 1, 3, 255));
-
- //  dna.push_back(debug_generateDna(0, 2, 1, 3, 255));
-  // dna.push_back(debug_generateDna(0, 0, 1, 0, 255));
 
     neuralNet = new NeuralNet(*Creature::netTopology, dna);
 
-    neuralNet->printNet();
+    //neuralNet->printNet();
 
     x = argx;
     y = argy;
     size = argsize;
     speed = 0.3;
     age = 0.0;
-    oscillatorPeriod = 1.0;
-    colour.r = randomNumberBetween(50, 200);
-    colour.g = randomNumberBetween(50, 200);
-    colour.b = randomNumberBetween(50, 200);
 }
 
 float Creature::getXPos() {
@@ -103,11 +80,6 @@ void Creature::update(float time) {
     inputValues.push_back(lastMoveX());
     inputValues.push_back(lastMoveY());
 
-  /*  printf("Input values:\n");
-    for (int i = 0; i < inputValues.size(); i++)
-        printf("%f ", inputValues[i]);
-    printf("\n"); */
-
     neuralNet->feedForward(inputValues);
 
     vector<double> outputValues;
@@ -119,14 +91,22 @@ void Creature::update(float time) {
         printf("%f ", outputValues[i]);
     printf("\n");*/
 
-    if (outputValues[0] > 0.0)
-        moveX(1);
-    else if (outputValues[0] < 0.0)
-        moveX(-1);
-    if (outputValues[1] > 0.0)
-        moveY(1);
-    else if (outputValues[1] < 0.0)
-        moveY(-1);
+    if (!isnan(outputValues[0])) {
+        if (outputValues[0] > 0.0) {
+            moveX(1);
+        } else if (outputValues[0] < 0.0) {
+            moveX(-1);
+        }
+    }
+
+    if (!isnan(outputValues[1])) {
+        if (outputValues[1] > 0.0)
+            moveY(1);
+        else if (outputValues[1] < 0.0)
+            moveY(-1);
+    }
+
+    //printf("MoveVector = (%f, %f)\n", outputValues[0], outputValues[1]);
 
     if (outputValues[2] != 0.0) {
         int rand = randomNumberBetween(0,3);
@@ -146,35 +126,23 @@ void Creature::update(float time) {
         }
     }
     
-    if (outputValues[3] != 0) {
-        //printf("%f\n", outputValues[3]);
+    if (outputValues[3] != 0)
         oscillatorPeriod = 2*outputValues[3];
-      //  printf("%f\n", oscillatorPeriod);
-    }
 }
 
 void Creature::moveX(int dir) {
-   // printf("yes\n");
-  //  float xMove = x + dir * speed;
-  //  if (xMove > 20 && xMove < WINDOW_WIDTH - 20)
-  //      x = xMove;
+    float mv = dir * speed;
 
-    if (x > 20 && x < WINDOW_WIDTH - 20)
-        x += dir * speed;
+    if ((mv < 0 && x > 20) || (mv > 0 && x < WINDOW_WIDTH - 20))
+        x += mv;
 }
 
 void Creature::moveY(int dir) {
-    if (y > 20 && y < WINDOW_HEIGHT - 20)
-        y += dir * speed; 
+    float mv = dir * speed;
 
-    /*
-    float yMove = y + dir * speed;
-    if (yMove > 20 && yMove < WINDOW_HEIGHT - 20)
-        y = yMove; */
-        
+    if ((mv < 0 && y > 20) || (mv > 0 && y < WINDOW_WIDTH - 20))
+        y += mv;    
 }
-
-//Creature::netTopology = new vector<int>();
 
 vector<int>* Creature::netTopology = nullptr;
 
@@ -211,7 +179,6 @@ void Creature::initializeNetTopology() {
 }
 
 double Creature::oscillator(float time) {
-   // printf("%f\n", oscillatorPeriod);
     return sinf(oscillatorPeriod*time);
 }
 

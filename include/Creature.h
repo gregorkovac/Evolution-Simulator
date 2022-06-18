@@ -8,7 +8,7 @@ class Creature {
     public:    
         Creature(float argx, float argy, int argsize, Creature* parent1 = NULL, Creature* parent2 = NULL);
         float getXPos();
-        float getYPos();
+        float getYPos(); 
         int getSize();
         void update(float time);
         void moveX(int dir);

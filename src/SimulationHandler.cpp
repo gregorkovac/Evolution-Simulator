@@ -18,22 +18,10 @@ void SimulationHandler::init(const char* title, int xpos, int ypos, int width, i
     // The simulation is now running
     running = true;
 
-    // This code is here just for testing
-  /*  vector<int> topology;
-    vector<int> dna;
-
-    topology.push_back(3);
-    topology.push_back(2);
-    topology.push_back(1);
-
-    dna.push_back(6639); // 0001100111101111
-
-    NeuralNet net(topology, dna); 
-
-    net.printNet();*/
-
+    // Initialize the creature's neural net topology
     Creature::initializeNetTopology();
 
+    // Create creatures
     for (int i = 0; i < numCreatures; i++) {
         creatures.push_back(new Creature(randomNumberBetween(1, width-1), randomNumberBetween(1, height-1), 5));
     }
@@ -65,8 +53,10 @@ void SimulationHandler::update() {
 
     int numCreatures = creatures.size();
     for (int i = 0; i < numCreatures; i++) {
+        // Update the creatures
         creatures[i]->update(time);
 
+        // Remove the creature if it dies of old age or enters the kill zone
         if (randomNumberBetween(0, deathFactor) < creatures[i]->getAge() || euclideanDistance(creatures[i]->getXPos(), creatures[i]->getYPos(), WINDOW_WIDTH, WINDOW_HEIGHT) < 100) {
             creatures.erase(creatures.begin() + i);
             numCreatures--;
@@ -78,6 +68,7 @@ void SimulationHandler::update() {
     for (int i = 0; i < numCreatures; i++) {
         for (int j = 0; j < i; j++) {
             if (i != j && euclideanDistance(creatures[i]->getXPos(), creatures[i]->getYPos(), creatures[j]->getXPos(), creatures[j]->getYPos()) <= creatureTriggerDistance) {
+                // Mate two creatures
                 if (creatures[i]->readyToMate() && creatures[j]->readyToMate() && creatures.size() < 200) {
                     creatures.push_back(new Creature(creatures[i]->getXPos(), creatures[i]->getYPos(), 5));
                 }
@@ -93,9 +84,11 @@ void  SimulationHandler::render() {
     //Clear the renderer with the draw color
     SDL_RenderClear(renderer);
 
+    // Draw the kill zone
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawCircle(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, 100);
 
+    // Draw the creatures
     int numCreatures = creatures.size();
     vector<Creature*>::iterator it;
     for (int i = 0; i < numCreatures; i++) {
