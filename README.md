@@ -1,6 +1,6 @@
 # Evolution Simulator 🪲🧬
 
-*This project is still in alpha stages of development* ⚙️📝🧑‍💻 \
+*This project is still in early stages of development* ⚙️📝🧑‍💻 \
 *Updates coming soon...*
 
 ## Project description
