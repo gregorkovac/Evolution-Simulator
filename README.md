@@ -10,7 +10,7 @@ As the name suggests, this is a simple evolution simulator that runs on C++ and 
 The evolution is represented by some creatures (currently represented by colourful circles) that are seemingly moving randomly at first. Their "brain" is a simple neural net consisting of three layers of neurons and connections between them.
 
 - **DNA** \
- The creature's brain is defined by its DNA. It's an array of numbers (the longer the array, the smarter the creature; currently it contains 50 numbers) between 0 and 65535 (`65535 = 2^15 + 2^14 + ... + 2^2 + 2^1 + 2^0`). Each of these numbers is of the form (in binary): `sSSSdDDDwwwwwwww`, where these bits represent:
+ The creature's brain is defined by its DNA. It's an array of numbers (the longer the array, the smarter the creature; currently it contains 50 numbers) between 0 and 65535 (`= 2^15 + 2^14 + ... + 2^2 + 2^1 + 2^0`). Each of these numbers is of the form (in binary): `sSSSdDDDwwwwwwww`, where these bits represent:
    - `s` ... source type (input neuron or internal neuron)
    - `SSS` ... ID of the source neuron
    - `d` ... destination type (output neuron or internal neuron)
