@@ -32,6 +32,7 @@ class Creature {
         Colour colour;
         vector<int> dna;
         float blockageU, blockageD, blockageL, blockageR;
+        float lastMX, lastMY;
         
         double oscillator(float time);
         double random();

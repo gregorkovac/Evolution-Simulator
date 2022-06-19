@@ -140,8 +140,10 @@ void Creature::moveX(int dir) {
 
     float mv = dir * speed;
 
-    if ((mv < 0 && x > 20) || (mv > 0 && x < WINDOW_WIDTH - 20))
+    if ((mv < 0 && x > 20) || (mv > 0 && x < WINDOW_WIDTH - 20)) {
         x += mv;
+        lastMX = mv;
+    }
 }
 
 void Creature::moveY(int dir) {
@@ -150,8 +152,10 @@ void Creature::moveY(int dir) {
 
     float mv = dir * speed;
 
-    if ((mv < 0 && y > 20) || (mv > 0 && y < WINDOW_WIDTH - 20))
+    if ((mv < 0 && y > 20) || (mv > 0 && y < WINDOW_WIDTH - 20)) {
         y += mv;    
+        lastMY = mv;
+    }
 }
 
 vector<int>* Creature::netTopology = nullptr;
@@ -213,11 +217,11 @@ double Creature::blockageRight() {
 }
 
 double Creature::lastMoveX() {
-    return 0.0;
+    return lastMX;
 }
 
 double Creature::lastMoveY() {
-    return 0.0;
+    return lastMY;
 }
 
 Colour Creature::getColour() {
