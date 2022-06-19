@@ -19,6 +19,8 @@ class Creature {
         double getAge();
         bool readyToMate();
         int getDnaAtPosition(int pos);
+        void setBlockage(char dir, float dist);
+        void resetBlockage();
 
     private:
         NeuralNet *neuralNet;
@@ -29,6 +31,7 @@ class Creature {
         float oscillatorPeriod;
         Colour colour;
         vector<int> dna;
+        float blockageU, blockageD, blockageL, blockageR;
         
         double oscillator(float time);
         double random();

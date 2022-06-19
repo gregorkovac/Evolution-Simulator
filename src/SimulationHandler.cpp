@@ -50,8 +50,44 @@ void SimulationHandler::handleEvents() {
 
 void SimulationHandler::update() {
     float time = (double)(clock() - tStart)/CLOCKS_PER_SEC;
-
     int numCreatures = creatures.size();
+
+    for (int i = 0; i < numCreatures; i++) {
+        for (int j = 0; j < i; j++) {
+            float ix, iy, jx, jy;
+            ix = creatures[i]->getXPos();
+            iy = creatures[i]->getYPos();
+            jx = creatures[j]->getXPos();
+            jy = creatures[j]->getYPos();
+
+            if (i != j && euclideanDistance(ix, iy, jx, jy) <= creatureTriggerDistance) {
+                float dist = abs(jx - ix);
+                if (ix < jx) {
+                    creatures[i]->setBlockage('R', dist);
+                    creatures[j]->setBlockage('L', dist);
+                } else {
+                    creatures[i]->setBlockage('L', dist);
+                    creatures[j]->setBlockage('R', dist);
+                }
+
+                dist = abs(jy - iy);
+
+                if (iy < jy) {
+                    creatures[i]->setBlockage('U', dist);
+                    creatures[j]->setBlockage('D', dist);
+                } else {
+                    creatures[i]->setBlockage('D', dist);
+                    creatures[j]->setBlockage('U', dist);
+                }
+
+                // Mate two creatures
+                if (creatures[i]->readyToMate() && creatures[j]->readyToMate() && creatures.size() < 200) {
+                    creatures.push_back(new Creature((ix + jx)/2, (iy + jy)/2, 5));
+                }
+            }
+        }
+    }
+
     for (int i = 0; i < numCreatures; i++) {
         // Update the creatures
         creatures[i]->update(time);
@@ -62,17 +98,6 @@ void SimulationHandler::update() {
             numCreatures--;
             i--;
             continue;
-        }
-    }
-
-    for (int i = 0; i < numCreatures; i++) {
-        for (int j = 0; j < i; j++) {
-            if (i != j && euclideanDistance(creatures[i]->getXPos(), creatures[i]->getYPos(), creatures[j]->getXPos(), creatures[j]->getYPos()) <= creatureTriggerDistance) {
-                // Mate two creatures
-                if (creatures[i]->readyToMate() && creatures[j]->readyToMate() && creatures.size() < 200) {
-                    creatures.push_back(new Creature(creatures[i]->getXPos(), creatures[i]->getYPos(), 5));
-                }
-            }
         }
     }
 }

@@ -68,6 +68,8 @@ int Creature::getSize() {
 void Creature::update(float time) {
     age = age + 0.1;
 
+    //printf("U:%f D:%f L:%f, R:%f\n", blockageU, blockageD, blockageL, blockageR);
+
     vector<double> inputValues;
 
     inputValues.push_back(oscillator(time));
@@ -128,9 +130,14 @@ void Creature::update(float time) {
     
     if (outputValues[3] != 0)
         oscillatorPeriod = 2*outputValues[3];
+
+    resetBlockage();
 }
 
 void Creature::moveX(int dir) {
+    if ((blockageL < size && blockageL > 0 && dir < 0) || (blockageR < size && blockageR > 0 && dir > 0))
+        return;
+
     float mv = dir * speed;
 
     if ((mv < 0 && x > 20) || (mv > 0 && x < WINDOW_WIDTH - 20))
@@ -138,6 +145,9 @@ void Creature::moveX(int dir) {
 }
 
 void Creature::moveY(int dir) {
+    if ((blockageD < size && blockageD > 0 && dir < 0) || (blockageU < size && blockageU > 0 && dir > 0))
+        return;
+
     float mv = dir * speed;
 
     if ((mv < 0 && y > 20) || (mv > 0 && y < WINDOW_WIDTH - 20))
@@ -187,19 +197,19 @@ double Creature::random() {
 }
 
 double Creature::blockageUp() {
-    return 0.0;
+    return blockageU;
 }
 
 double Creature::blockageDown() {
-    return 0.0;
+    return blockageD;
 }
 
 double Creature::blockageLeft() {
-    return 0.0;
+    return blockageL;
 }
 
 double Creature::blockageRight() {
-    return 0.0;
+    return blockageR;
 }
 
 double Creature::lastMoveX() {
@@ -228,4 +238,18 @@ bool Creature::readyToMate() {
 
 int Creature::getDnaAtPosition(int pos) {
     return dna.at(pos);
+}
+
+void Creature::setBlockage(char dir, float dist) {
+    if (dir == 'U') blockageU = dist;
+    else if (dir == 'D') blockageD = dist;
+    else if (dir == 'L') blockageL = dist;
+    else if (dir == 'R') blockageR = dist;
+}
+
+void Creature::resetBlockage() {
+    blockageU = 0;
+    blockageD = 0;
+    blockageL = 0;
+    blockageR = 0;
 }
